@@ -3,10 +3,9 @@ test = {
   'points': 0,
   'suites': [
     {
-      'type': 'wwpp',
       'cases': [
         {
-          'code': """
+          'code': r"""
           >>> x = 20
           >>> x + 2
           22
@@ -19,8 +18,12 @@ test = {
           >>> y + x
           28
           """,
-        },
-      ]
+          'hidden': False,
+          'multiline': False
+        }
+      ],
+      'scored': False,
+      'type': 'wwpp'
     }
   ]
 }
