@@ -1,2 +1,3 @@
 *.ok_*
 __pycache__/
+*.sh

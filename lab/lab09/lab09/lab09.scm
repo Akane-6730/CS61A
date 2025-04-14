@@ -40,12 +40,19 @@
       b
       a))
 
+;; fix: (gcd 0 x) = x
 (define (gcd a b)
-  (if (zero? (modulo
-              (max a b)
-              (min a b)))
-      (min a b)
-      (gcd (min a b)
-           (modulo
+  (cond
+   ((zero? a)
+    b)
+   ((zero? b)
+    a)
+   ((zero? (modulo
             (max a b)
-            (min a b)))))
+            (min a b)))
+    (min a b))
+   (else
+    (gcd (min a b)
+         (modulo
+          (max a b)
+          (min a b))))))
