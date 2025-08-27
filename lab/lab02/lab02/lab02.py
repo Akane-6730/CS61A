@@ -1,3 +1,25 @@
+def lambda_curry2(func):
+    """
+    Returns a Curried version of a two-argument function FUNC.
+    >>> from operator import add, mul, mod
+    >>> curried_add = lambda_curry2(add)
+    >>> add_three = curried_add(3)
+    >>> add_three(5)
+    8
+    >>> curried_mul = lambda_curry2(mul)
+    >>> mul_5 = curried_mul(5)
+    >>> mul_5(42)
+    210
+    >>> lambda_curry2(mod)(123)(10)
+    3
+    >>> # You aren't expected to understand the code of this test.
+    >>> # This checks to make sure that you only use one line.
+    >>> import inspect, ast
+    >>> [type(x).__name__ for x in ast.parse(inspect.getsource(lambda_curry2)).body[0].body]
+    ['Expr', 'Return']
+    """
+    return lambda x: lambda y: func(x, y)
+
 
 def composite_identity(f, g):
     """
@@ -23,6 +45,7 @@ def sum_digits(y):
         total, y = total + y % 10, y // 10
     return total
 
+
 def is_prime(n):
     """Return whether positive integer n is prime."""
     if n == 1:
@@ -33,6 +56,7 @@ def is_prime(n):
             return False
         k += 1
     return True
+
 
 def count_cond(condition):
     """Returns a function with one parameter N that counts all the numbers from
@@ -59,7 +83,17 @@ def count_cond(condition):
     >>> count_primes(20)   # 2, 3, 5, 7, 11, 13, 17, 19
     8
     """
-    "*** YOUR CODE HERE ***"
+
+    def counter(n):
+        i = 1
+        count = 0
+        while i <= n:
+            if condition(n, i):
+                count += 1
+            i += 1
+        return count
+
+    return counter
 
 
 def multiple(a, b):
@@ -103,3 +137,25 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
+
+    def f(n):
+        def g(x):
+            if n == 0:
+                return x
+            elif n % 3 == 0:
+                return f3(f(n - 1)(x))
+            elif n % 3 == 2:
+                return f2(f(n - 1)(x))
+            else:
+                return f1(f(n - 1)(x))
+        return g
+    return f
+
+    # An elegant solution
+    def f(n):
+        def g(x):
+            if n == 0:
+                return x
+            return cycle(f2, f3, f1)(n - 1)(f1(x))
+        return g
+    return f
